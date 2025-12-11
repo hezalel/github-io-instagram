@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Webhook Callback</title>
+</head>
+<body>
+    <script>
+        // Handle Instagram webhook verification and callbacks
+        
+        // For GET requests (webhook verification)
+        if (window.location.search) {
+            const params = new URLSearchParams(window.location.search);
+            const hubMode = params.get('hub.mode');
+            const hubChallenge = params.get('hub.challenge');
+            const hubVerifyToken = params.get('hub.verify_token');
+            
+            // Verify token - must match what you entered in Meta settings
+            const VERIFY_TOKEN = 'instagram_webhook_secret';
+            
+            if (hubMode === 'subscribe' && hubVerifyToken === VERIFY_TOKEN) {
+                // Return the challenge to verify the endpoint
+                document.body.textContent = hubChallenge;
+                console.log('Webhook verified successfully');
+            } else {
+                document.body.textContent = 'Verification failed';
+                console.log('Webhook verification failed');
+            }
+        } else {
+            // No query params - likely a POST request or direct visit
+            console.log('Webhook callback endpoint ready');
+        }
+        
+        // For POST requests (actual webhook notifications)
+        // Instagram will send notifications about comments, mentions, etc.
+        // In a real app with a backend, you would process these server-side
+    </script>
+    
+    <h1>Instagram Webhook Callback</h1>
+    <p>This endpoint handles webhook notifications from Instagram.</p>
+    <p>Status: <span id="status">Ready</span></p>
+    
+    <script>
+        if (window.location.search) {
+            document.getElementById('status').textContent = 'Verified';
+        }
+    </script>
+</body>
+</html>
